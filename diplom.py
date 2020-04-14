@@ -1,11 +1,13 @@
 import time
-import random
 import numpy as np
 from decimal import Decimal
 import copy
 import string
+from tkinter import *
 
 
+
+root = Tk()
 x = 0
 
 
@@ -90,6 +92,17 @@ for index in pas:
     f.write(str(index))
 
 pp = ''
-print(pp.join(pas))
+abd = pp.join(pas)
 #print(o)
 f.close()
+
+"""Генерация окна приложения"""
+root.minsize(width = 800, height = 600)
+text = Text(width = 25, height = 3)
+text.insert(1.0, abd)
+
+text.pack()
+
+
+
+root.mainloop()
