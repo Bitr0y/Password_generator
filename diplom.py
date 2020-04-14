@@ -98,8 +98,12 @@ f.close()
 
 """Генерация окна приложения"""
 root.minsize(width = 800, height = 600)
+
+b = Button(text = 'Генерировать', width = 30, height = 4)
 text = Text(width = 25, height = 3)
 text.insert(1.0, abd)
+
+b.pack()
 
 text.pack()
 
