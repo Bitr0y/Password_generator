@@ -60,7 +60,12 @@ pas = []
 
 #Создание случайных чисел из памяти
 def schet():
-    for o in range(5):
+    arr.clear()
+    pas.clear()
+    text.delete(1.0, END)
+    s = number_column.get()
+    s = int(s)
+    for o in range(s):
         emptyMemory = np.empty((20, 2))
         c= copy.deepcopy(emptyMemory)
         c.tolist()
@@ -88,8 +93,7 @@ def schet():
     square = arr[0]*10000
     square = round(square)
 
-
-    for i in range(1,8,1):
+    for i in range(1,s+1,1):
         square = method_square(square)
         rand_time = arr[i]
         myTime = time.time()
@@ -103,7 +107,7 @@ def schet():
     pp = ''
     global abd
     abd = pp.join(pas)
-    text.delete(1.0, END)
+
     text.insert(1.0, abd)
 
 
@@ -118,10 +122,10 @@ button_generation = Button(text = 'Генерировать', width = 30, height
 button_write = Button(text = 'Записать в\n текстовый документ', width = 15, height = 2, command = writting_file)
 button_open = Button(text = 'Open file', width = 15, height = 2, command = open_txt)
 text = Text(width = 25, height = 3)
-table_column = Spinbox(width=7, from_=1, to=50)
-
+number_column = Spinbox(width=7, from_=5, to=20)
+number_column.pack()
 button_generation.pack(pady = 15)
-
+text.insert(1.0, 'ssssssssssssssss')
 text.pack(pady = 10)
 
 button_write.pack(pady = 15)
