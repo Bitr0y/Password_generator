@@ -104,9 +104,9 @@ def schet():
         time.sleep(maybe_time)
         proverka(modul)
 
-    pp = ''
+    p = ''
     global abd
-    abd = pp.join(pas)
+    abd = p.join(pas)
 
     text.insert(1.0, abd)
 
@@ -116,6 +116,8 @@ def schet():
 
 
 """Генерация окна приложения"""
+
+
 root.minsize(width = 800, height = 600)
 
 button_generation = Button(text = 'Генерировать', width = 30, height = 4, command = schet)
