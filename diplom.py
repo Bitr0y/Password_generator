@@ -125,7 +125,6 @@ text = Text(width = 25, height = 3)
 number_column = Spinbox(width=7, from_=5, to=20)
 number_column.pack()
 button_generation.pack(pady = 15)
-text.insert(1.0, 'ssssssssssssssss')
 text.pack(pady = 10)
 
 button_write.pack(pady = 15)
