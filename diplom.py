@@ -1,7 +1,7 @@
 import time, threading, os, string, copy
 import numpy as np
 from decimal import Decimal
-from tkinter import *
+import tkinter as tk
 from tkinter.filedialog import *
 from tkinter import messagebox
 import tkinter.ttk as ttk
@@ -41,6 +41,7 @@ class Password:
         for index in self.pas:
             f.write(str(index))
         f.close()
+        Label(text = "Збережено!", font = "roboto 13").place(x = 305, y = 530)
 
     def open_txt(self):
         os.startfile('password.txt')
@@ -91,30 +92,41 @@ class Password:
             secund = round(secund)
             modul = (secund) % square
             maybe_time = myTime-round(myTime-1)
-            time.sleep(maybe_time)
             self.text.insert(END, '*')
+            time.sleep(maybe_time)
             if self.cvar.get() == 0:
                 self.proverka(modul)
             else: self.proverkaIzSimvolami(modul)
 
-        p = ''
-        global abd
-        abd = p.join(self.pas)
+        abd = self.p.join(self.pas)
+        self.text.configure(state='disabled')
 
 
     def clear(self):
         self.arr.clear()
         self.pas.clear()
-        self.text.delete(1.0, END)
+        self.text.config(state='normal')
+        self.text.delete(0, END)
         self.s = self.number_column.get()
         Tit,self.s = self.check_number(self.s)
         if Tit == True:
+            self.t.start()
             self.schet()
         else: messagebox.showerror('Ошибка','Ведите число от 5 до 20')
 
     def see(self):
-        self.text.delete(1.0, END)
-        self.text.insert(1.0, abd)
+        if self.cvar1.get() == 1:
+            self.text.config(state='normal')
+            self.text.delete(0, END)
+            self.text.insert(0, self.p.join(self.pas))
+            self.text.config(state='readonly')
+        else:
+            self.text.config(state='normal')
+            self.text.delete(0, END)
+            self.text.insert(0, "*"*len(self.pas))
+            self.text.config(state='readonly')
+
+
 
 
 
@@ -123,37 +135,69 @@ class Password:
         self.x = 0
         self.arr = []
         self.pas = []
+        self.p = ''
         self.initUI()
 
     def initUI(self):
+        f_generate = ttk.Frame(width = 340, height = 80)
+        f_generate.pack_propagate(0)
+        f_generate.place(x = 280, y = 250)
+        f_see = ttk.Frame(width = 120, height = 40)
+        f_see.place(x = 275, y = 445)
+        f_open = ttk.Frame(width = 120, height = 40)
+        f_open.pack_propagate(0)
+        f_open.place(x = 488, y = 480)
+        f_save = ttk.Frame(width = 120, height = 40)
+        f_save.pack_propagate(0)
+        f_save.place(x = 295, y = 480)
+
+        but_style = ttk.Style()
+        but_style.configure ("Generation.TButton", font = ("SF UI",20, "bold"))
+        but_style.configure ("Other.TButton", font = ("roboto",12))
+        but_style.configure("Check.TCheckbutton", font = ("roboto", 12))
+        but_style.configure("Number.TSpinbox", font = ("roboto", 12))
+
+
+
+
         Label(text = 'Генератор паролів', justify = CENTER, font=("Comic Sans MS", 24, "bold")).place(x = 320, y = 0)
-        button_generation = Button(text = 'Генерувати', font = ("SF UI",20, "bold"), width = 20, height = 2, command = self.clear)
-        button_write = Button(text = 'Записати в\n текстовий документ', font = ("roboto",12), width = 15, height = 2, command = self.writting_file)
-        button_open = Button(text = 'Відкрити файл', font = ("roboto",12), width = 15, height = 2, command = self.open_txt)
-        button_see = Button(text = 'Показати', font = ("roboto",12), width = 15, height = 2, command = self.see)
-        self.text = Text(width = 47, height = 5)
-        self.number_column = Spinbox(width=20, from_=5, to=20)
+        button_generation = ttk.Button(f_generate,text = 'Генерувати', command = self.clear, style = "Generation.TButton")
+        button_write = ttk.Button(f_save,text = 'Зберегти', command = self.writting_file, style = "Other.TButton")
+        button_open = ttk.Button(f_open,text = 'Відкрити файл', command = self.open_txt, style = "Other.TButton")
+        self.cvar1 = BooleanVar()
+        self.cvar1.set(0)
+        button_see = ttk.Checkbutton(f_see,text = 'Показати пароль', command = self.see, variable=self.cvar1, onvalue=1, offvalue=0, style = "Check.TCheckbutton")
+        self.text = Entry(width = 23,  font = ("roboto",20), state = "readonly")
+        self.number_column = ttk.Spinbox(width=20, from_=6, to=20, style = "Number.TSpinbox")
+        self.number_column.set(6)
         self.cvar = BooleanVar()
         self.cvar.set(0)
-        c1 = Checkbutton(text="Використовувати спеціальні символи", font = ("roboto"), variable=self.cvar, onvalue=1, offvalue=0)
+        c1 = ttk.Checkbutton(text="Використовувати спеціальні символи", variable=self.cvar, onvalue=1, offvalue=0, style = "Check.TCheckbutton")
+        #self.progress = ttk.Progressbar(orient = HORIZONTAL, mode = 'indeterminate')
+        #self.progress.place(x = 450, y = 350)
+        #self.t = threading.Thread()
+        #self.t.__init__(target = self.progress.start, args = ())
+        """Binds for Text"""
+        #self.text.bind('<Control-a>',self.selectAll)
+
 
         Label(text = 'Для генерації паролю заповніть форму нижче та натисніть кнопку "Генерувати"', font = ("roboto",)).place(x = 116, y = 80)
         Label(text = 'Довжина: ', font = ("roboto",14)).place(x = 20, y = 125)
         self.number_column.place(x = 160, y = 130)
-        Label(text = 'Від 5 до 20 символів', font = ("roboto", 10)).place(x = 160, y = 150)
+        Label(text = 'Від 6 до 20 символів', font = ("roboto", 10)).place(x = 160, y = 150)
         #Label(text = 'Символи:', font = ("roboto", 14)).place(x = 10, y = 180)
 
         c1.place(x = 155, y = 175)
-        button_generation.place(x = 280, y = 250)
-        self.text.place(x = 230, y = 400)
-        button_see.place(x = 620, y = 416)
-        button_write.place(x = 250, y = 520)
-        button_open.place(x = 450, y = 520)
+        button_generation.pack(fill=tk.BOTH, expand=1)
+        self.text.place(x = 275, y = 400)
+        button_see.pack(fill=tk.BOTH, expand=1)
+        button_write.pack(fill=tk.BOTH, expand=1)
+        button_open.pack(fill=tk.BOTH, expand=1)
 
 
-        self.pb = Label(text = 'timer')
+        #self.pb = Label(text = 'timer')
         #self.pb = ttk.Progressbar(mode="determinate", length = 100)
-        self.pb.place(x = 450, y = 350)
+        #self.pb.place(x = 450, y = 350)
 
 
 
@@ -170,6 +214,7 @@ def main():
     app = Password()
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
+    root.title('Pentagon')
     root.mainloop()
 
 if __name__ == '__main__':
