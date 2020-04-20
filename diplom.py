@@ -36,12 +36,7 @@ class Password:
         bit = bit % 94
         self.pas.append(string.printable[bit])
 
-    def writting_file(self):
-        f = open('password.txt', 'w')
-        for index in self.pas:
-            f.write(str(index))
-        f.close()
-        Label(text = "Збережено!", font = "roboto 13").place(x = 305, y = 530)
+
 
     def open_txt(self):
         os.startfile('password.txt')
@@ -54,8 +49,14 @@ class Password:
             messagebox.showerror('Ошибка','Введите число!')
         return 5<= t1<=20, t1
 
+    def wait(self):
+        lab = Label(text = "Будь-ласка, зачекайте")
+        lab.place(x = 450, y = 350)
+
+
 
     def schet(self, *args):
+        self.wait()
 
         for o in range(self.s):
             emptyMemory = np.empty((20, 2))
@@ -100,9 +101,11 @@ class Password:
 
         abd = self.p.join(self.pas)
         self.text.configure(state='disabled')
+        self.button_generation.configure(state = NORMAL)
 
 
     def clear(self):
+        self.button_generation.configure(state = DISABLED)
         self.arr.clear()
         self.pas.clear()
         self.text.config(state='normal')
@@ -110,7 +113,7 @@ class Password:
         self.s = self.number_column.get()
         Tit,self.s = self.check_number(self.s)
         if Tit == True:
-            self.t.start()
+            #self.t.start()
             self.schet()
         else: messagebox.showerror('Ошибка','Ведите число от 5 до 20')
 
@@ -125,6 +128,14 @@ class Password:
             self.text.delete(0, END)
             self.text.insert(0, "*"*len(self.pas))
             self.text.config(state='readonly')
+
+    def writting_file(self):
+        f = open('password.txt', 'w')
+        for index in self.pas:
+            f.write(str(index))
+        f.close()
+        Label(text = "Збережено!", font = "roboto 13").place(x = 305, y = 530)
+
 
 
 
@@ -161,7 +172,7 @@ class Password:
 
 
         Label(text = 'Генератор паролів', justify = CENTER, font=("Comic Sans MS", 24, "bold")).place(x = 320, y = 0)
-        button_generation = ttk.Button(f_generate,text = 'Генерувати', command = self.clear, style = "Generation.TButton")
+        self.button_generation = ttk.Button(f_generate,text = 'Генерувати', command = self.clear, style = "Generation.TButton")
         button_write = ttk.Button(f_save,text = 'Зберегти', command = self.writting_file, style = "Other.TButton")
         button_open = ttk.Button(f_open,text = 'Відкрити файл', command = self.open_txt, style = "Other.TButton")
         self.cvar1 = BooleanVar()
@@ -176,9 +187,7 @@ class Password:
         #self.progress = ttk.Progressbar(orient = HORIZONTAL, mode = 'indeterminate')
         #self.progress.place(x = 450, y = 350)
         #self.t = threading.Thread()
-        #self.t.__init__(target = self.progress.start, args = ())
-        """Binds for Text"""
-        #self.text.bind('<Control-a>',self.selectAll)
+        #self.t.__init__(target = self.progress.start, args = ('1.'))
 
 
         Label(text = 'Для генерації паролю заповніть форму нижче та натисніть кнопку "Генерувати"', font = ("roboto",)).place(x = 116, y = 80)
@@ -188,7 +197,7 @@ class Password:
         #Label(text = 'Символи:', font = ("roboto", 14)).place(x = 10, y = 180)
 
         c1.place(x = 155, y = 175)
-        button_generation.pack(fill=tk.BOTH, expand=1)
+        self.button_generation.pack(fill=tk.BOTH, expand=1)
         self.text.place(x = 275, y = 400)
         button_see.pack(fill=tk.BOTH, expand=1)
         button_write.pack(fill=tk.BOTH, expand=1)
