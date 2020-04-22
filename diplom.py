@@ -49,14 +49,13 @@ class Password:
             messagebox.showerror('Ошибка','Введите число!')
         return 5<= t1<=20, t1
 
-    def wait(self):
-        lab = Label(text = "Будь-ласка, зачекайте")
-        lab.place(x = 450, y = 350)
+    #def butt(self):
+        #self.button_generation.configure(state = DISABLED)
+        #root.after(10,schet)
 
 
 
     def schet(self, *args):
-        self.wait()
 
         for o in range(self.s):
             emptyMemory = np.empty((20, 2))
@@ -85,19 +84,22 @@ class Password:
 
         square = self.arr[0]*10000
         square = round(square)
-
-        for i in range(1,self.s+1,1):
+        for i in range(1,self.s,1):
             square = self.method_square(square)
             myTime = time.time()
             secund = myTime*10**5
             secund = round(secund)
             modul = (secund) % square
+            #global maybe_time
             maybe_time = myTime-round(myTime-1)
             self.text.insert(END, '*')
-            time.sleep(maybe_time)
             if self.cvar.get() == 0:
                 self.proverka(modul)
             else: self.proverkaIzSimvolami(modul)
+            time.sleep(maybe_time)
+        #for i in range(1,self.s,1):
+            #self.root.after(1000, self.schet_final, square)
+            #time.sleep(self.s)
 
         abd = self.p.join(self.pas)
         self.text.configure(state='disabled')
@@ -105,7 +107,6 @@ class Password:
 
 
     def clear(self):
-        self.button_generation.configure(state = DISABLED)
         self.arr.clear()
         self.pas.clear()
         self.text.config(state='normal')
@@ -113,9 +114,10 @@ class Password:
         self.s = self.number_column.get()
         Tit,self.s = self.check_number(self.s)
         if Tit == True:
+            self.button_generation.configure(state = DISABLED)
             #self.t.start()
             self.schet()
-        else: messagebox.showerror('Ошибка','Ведите число от 5 до 20')
+        else: messagebox.showerror('Ошибка','Ведите число от 6 до 20')
 
     def see(self):
         if self.cvar1.get() == 1:
@@ -142,11 +144,12 @@ class Password:
 
 
 
-    def __init__(self):
+    def __init__(self, root):
         self.x = 0
         self.arr = []
         self.pas = []
         self.p = ''
+        self.root = root
         self.initUI()
 
     def initUI(self):
@@ -187,7 +190,7 @@ class Password:
         #self.progress = ttk.Progressbar(orient = HORIZONTAL, mode = 'indeterminate')
         #self.progress.place(x = 450, y = 350)
         #self.t = threading.Thread()
-        #self.t.__init__(target = self.progress.start, args = ('1.'))
+        #self.t.__init__(target = self.butt, args = ('1.'))
 
 
         Label(text = 'Для генерації паролю заповніть форму нижче та натисніть кнопку "Генерувати"', font = ("roboto",)).place(x = 116, y = 80)
@@ -220,7 +223,7 @@ def main():
     root = Tk()
     root.geometry('900x600+320+240')
     #root.minsize(width = 800, height = 600)
-    app = Password()
+    app = Password(root)
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
     root.title('Pentagon')
